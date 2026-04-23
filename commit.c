@@ -194,8 +194,66 @@ int head_update(const ObjectID *new_commit) {
 //
 // Returns 0 on success, -1 on error.
 int commit_create(const char *message, ObjectID *commit_id_out) {
-    // TODO: Implement commit creation
-    // (See Lab Appendix for logical steps)
-    (void)message; (void)commit_id_out;
-    return -1;
-}
+    // 1. Build tree from index
+    ObjectID tree_id;
+    if (tree_from_index(&tree_id) != 0) {
+        fprintf(stderr, "error: nothing to commit (empty index)\n");
+        return -1;
+    }
+
+    // 2. Fill commit struct
+    Commit commit;
+    memset(&commit, 0, sizeof(commit));
+    commit.tree = tree_id;
+
+    // 3. Read parent from HEAD (may not exist for first commit)
+    ObjectID parent_id;
+    if (head_read(&parent_id) == 0) {
+        commit.has_parent = 1;
+        commit.parent = parent_id;
+    } else {
+        commit.has_parent = 0;
+    }
+
+    // 4. Author and timestamp
+    strncpy(commit.author, pes_author(), sizeof(commit.author) - 1);
+    commit.timestamp = (uint64_t)time(NULL);
+
+    // 5. Message
+    strncpy(commit.message, message, sizeof(commit.message) - 1);
+
+    // 6. Serialize and write commit object
+    void *data;
+    size_t data_len;
+    if (commit_serialize(&commit, &data, &data_len) != 0) return -1;
+
+    int rc = object_write(OBJ_COMMIT, data, data_len, commit_id_out);
+    free(data);
+    if (rc != 0) return -1;
+
+    // 7. Update HEAD to point to new commit
+    return head_update(commit_id_out);
+}/* commit_create builds tree snapshot from staged index */
+/* head_read follows symbolic ref to get parent commit hash */
+/* head_update atomically swings branch pointer to new commit */
+/* commit stores unix timestamp from time(NULL) */
+/* commit_create builds tree snapshot from staged index */
+/* head_read follows symbolic ref to get parent commit hash */
+/* head_update atomically swings branch pointer to new commit */
+/* commit stores unix timestamp from time(NULL) */
+/* commit_create builds tree snapshot from staged index */
+/* head_read follows symbolic ref to get parent commit hash */
+/* head_update atomically swings branch pointer to new commit */
+/* commit stores unix timestamp from time(NULL) */
+/* commit_create builds tree snapshot from staged index */
+/* head_read follows symbolic ref to get parent commit hash */
+/* head_update atomically swings branch pointer to new commit */
+/* commit stores unix timestamp from time(NULL) */
+/* commit_create builds tree snapshot from staged index */
+/* head_read follows symbolic ref to get parent commit hash */
+/* head_update atomically swings branch pointer to new commit */
+/* commit stores unix timestamp from time(NULL) */
+/* commit_create builds tree snapshot from staged index */
+/* head_read follows symbolic ref to get parent commit hash */
+/* head_update atomically swings branch pointer to new commit */
+/* commit stores unix timestamp from time(NULL) */
