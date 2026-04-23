@@ -1,7 +1,7 @@
 # PES-VCS Lab Report
-**Name:** Gagan  
-**SRN:** PES1UG24CS166  
-**Repository:** [PES1UG24CS166-pes-vcs](https://github.com/Gagancreates/PES1UG24CS166-pes-vcs)
+**Name:** D Pranav Sai  
+**SRN:** PES1UG24CS139 
+
 
 ---
 
